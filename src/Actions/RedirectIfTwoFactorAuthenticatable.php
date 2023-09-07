@@ -148,7 +148,11 @@ class RedirectIfTwoFactorAuthenticatable
         TwoFactorAuthenticationChallenged::dispatch($user);
 
         return $request->wantsJson()
-                    ? response()->json(['two_factor' => true])
+                    ? response()
+                        ->json([
+                            'two_factor' => true,
+                            'login_id' => $user->getKey()
+                        ])
                     : redirect()->route('two-factor.login');
     }
 }
