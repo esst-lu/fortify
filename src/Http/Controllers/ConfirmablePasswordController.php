@@ -53,7 +53,7 @@ class ConfirmablePasswordController extends Controller
             $this->guard, $request->user(), $request->input('password')
         );
 
-        if ($confirmed) {
+        if ($confirmed && $request->hasSession()) {
             $request->session()->put('auth.password_confirmed_at', time());
         }
 

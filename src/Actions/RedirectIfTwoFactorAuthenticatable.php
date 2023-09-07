@@ -138,10 +138,12 @@ class RedirectIfTwoFactorAuthenticatable
      */
     protected function twoFactorChallengeResponse($request, $user)
     {
-        $request->session()->put([
-            'login.id' => $user->getKey(),
-            'login.remember' => $request->boolean('remember'),
-        ]);
+        if ($request->hasSession()) {
+            $request->session()->put([
+                'login.id' => $user->getKey(),
+                'login.remember' => $request->boolean('remember'),
+            ]);
+        }
 
         TwoFactorAuthenticationChallenged::dispatch($user);
 

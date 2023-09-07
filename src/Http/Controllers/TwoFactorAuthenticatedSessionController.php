@@ -66,7 +66,9 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         $this->guard->login($user, $request->remember());
 
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return app(TwoFactorLoginResponse::class);
     }

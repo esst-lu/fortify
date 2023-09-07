@@ -57,7 +57,7 @@ class TwoFactorLoginRequest extends FormRequest
         return $this->code && tap(app(TwoFactorAuthenticationProvider::class)->verify(
             decrypt($this->challengedUser()->two_factor_secret), $this->code
         ), function ($result) {
-            if ($result) {
+            if ($this->hasSession() && $result) {
                 $this->session()->forget('login.id');
             }
         });
@@ -77,7 +77,7 @@ class TwoFactorLoginRequest extends FormRequest
         return tap(collect($this->challengedUser()->recoveryCodes())->first(function ($code) {
             return hash_equals($code, $this->recovery_code) ? $code : null;
         }), function ($code) {
-            if ($code) {
+            if ($this->hasSession() && $code) {
                 $this->session()->forget('login.id');
             }
         });
@@ -96,8 +96,14 @@ class TwoFactorLoginRequest extends FormRequest
 
         $model = app(StatefulGuard::class)->getProvider()->getModel();
 
-        return $this->session()->has('login.id') &&
-            $model::find($this->session()->get('login.id'));
+        $id = null;
+        if ($this->hasSession() && $this->session()->has('login.id')) {
+            $id = $this->session()->get('login.id');
+        } else if ($this->has('login_id')) {
+            $id = $this->input('login_id');
+        }
+
+        return $id && $model::find($id);
     }
 
     /**
@@ -113,8 +119,14 @@ class TwoFactorLoginRequest extends FormRequest
 
         $model = app(StatefulGuard::class)->getProvider()->getModel();
 
-        if (! $this->session()->has('login.id') ||
-            ! $user = $model::find($this->session()->get('login.id'))) {
+        $id = null;
+        if ($this->hasSession() && $this->session()->has('login.id')) {
+            $id = $this->session()->get('login.id');
+        } else if ($this->has('login_id')) {
+            $id = $this->input('login_id');
+        }
+
+        if (! $id || ! $user = $model::find($id)) {
             throw new HttpResponseException(
                 app(FailedTwoFactorLoginResponse::class)->toResponse($this)
             );
@@ -131,7 +143,9 @@ class TwoFactorLoginRequest extends FormRequest
     public function remember()
     {
         if (! $this->remember) {
-            $this->remember = $this->session()->pull('login.remember', false);
+            $this->remember = $this->hasSession() ?
+                $this->session()->pull('login.remember', false)
+                : false;
         }
 
         return $this->remember;
