@@ -42,9 +42,11 @@ class PasswordResetLinkController extends Controller
             $request->only(Fortify::email())
         );
 
-        return $status == Password::RESET_LINK_SENT
+        /*return $status == Password::RESET_LINK_SENT
                     ? app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status])
-                    : app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);
+                    : app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);*/
+
+        return app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status]);
     }
 
     /**
