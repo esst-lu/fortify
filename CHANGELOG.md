@@ -1,6 +1,20 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.20.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.1...1.x)
+
+## [v1.21.1](https://github.com/laravel/fortify/compare/v1.21.0...v1.21.1) - 2024-03-19
+
+* Specify return type array type by [@santigarcor](https://github.com/santigarcor) in https://github.com/laravel/fortify/pull/525
+* [1.x] Make commands lazy by [@timacdonald](https://github.com/timacdonald) in https://github.com/laravel/fortify/pull/527
+
+## [v1.21.0](https://github.com/laravel/fortify/compare/v1.20.1...v1.21.0) - 2024-03-08
+
+* [1.x] Adds `fortify:install` Artisan command by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/524
+
+## [v1.20.1](https://github.com/laravel/fortify/compare/v1.20.0...v1.20.1) - 2024-02-08
+
+* Don't overwrite an already two factor secret unless force = true by [@danmatthews](https://github.com/danmatthews) in https://github.com/laravel/fortify/pull/518
+* Use `Date` facade for storing the password confirmation timestamp by [@chrisvanlier2005](https://github.com/chrisvanlier2005) in https://github.com/laravel/fortify/pull/520
 
 ## [v1.20.0](https://github.com/laravel/fortify/compare/v1.19.1...v1.20.0) - 2024-01-15
 
